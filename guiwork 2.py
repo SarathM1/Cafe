@@ -2,6 +2,30 @@ import sys
 from PyQt4 import QtGui
 import socket
 
+class ping():
+	"""To ping computers"""
+	def __init__(self, ip,name, status="off"):
+		self.ip = ip
+		self.name = name
+
+		self.s =  socket.socket ()
+		self.s.settimeout (0.25)
+
+		self.img = self.name + status + '.png'
+	
+	def ping(self):
+	    try:
+	        self.s.connect (("192.168.0.172", 135))
+	    except socket.error:
+	    	self.setImage('off')
+	    else:
+	        self.setImage('on')
+	
+	def setImage(self,st):
+		self.img = self.name + st + '.png'
+
+
+    s.close()	
 class Window(QtGui.QMainWindow):
 
     def __init__(self):
@@ -42,132 +66,39 @@ class Window(QtGui.QMainWindow):
 
         s.close()
 #25
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.172", 135))
-        except socket.error:
-            one="pc1off.png"
-        else:
-            one="pc1on.png"
-            
-
-        s.close()
-
+        pc1 = ping("192.168.0.172",'pc1')
+        
 #24
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.127", 135))
-        except socket.error:
-            two="pc2off.png"
-        else:
-            two="pc2on.png"
-            
-
-        s.close()
-
+        pc2 = ping("192.168.0.127","pc2")
+        
 #23
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.38", 135))
-        except socket.error:
-            three="pc3off.png"
-        else:
-            three="pc3on.png"
-        s.close()
+        pc3 = ping("192.168.0.38","pc3")
 
 #22
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.114", 135))
-        except socket.error:
-            four="pc4off.png"
-        else:
-            four="pc4on.png"
-
-        s.close()
+        pc4 = ping("192.168.0.114","pc4")
+        
 #21
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.128", 135))
-        except socket.error:
-            five="pc5off.png"
-        else:
-            five="pc5on.png"     
-        s.close()
-
+        pc5 = ping("192.168.0.128","pc5")
+        
 #20
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.20", 135))
-        except socket.error:
-            six="pc6off.png"
-        else:
-            six="pc6on.png"
-
-        s.close()
-
+        pc6 = ping("192.168.0.20","pc6")
+        
 #19
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.152", 135))
-        except socket.error:
-            seven="pc7off.png"
-        else:
-            seven="pc7on.png"
-
-        s.close()
+        pc7 = ping("192.168.0.152","pc7")
+        
 #18
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.153", 135))
-        except socket.error:
-            eight="pc8off.png"
-        else:
-            eight="pc8on.png"
-        s.close()
-
+        pc8 = ping("192.168.0.153","pc8")
+        
 #17
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.2", 135))
-        except socket.error:
-            nine="pc9off.png"
-        else:
-            nine="pc9on.png"
-        s.close()
+        pc9 = ping("192.168.0.2","pc9")
 
 
 #16
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.68", 135))
-        except socket.error:
-            ten="pc10off.png"
-        else:
-            ten="pc10on.png"
-        s.close()
+        pc10 = ping("192.168.0.128","pc10")
 
 #16
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.11", 135))
-        except socket.error:
-            eleven="pc11off.png"
-        else:
-            eleven="pc11on.png"
-        s.close()
-
+        pc11 = ping("192.168.0.128","pc11")
+        
 
 
 ##---------------------------------------------------------------------------------------------
