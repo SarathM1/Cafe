@@ -64,20 +64,26 @@ class Window(QtGui.QMainWindow):
         Aboutus.setStatusTip('About Us')
         #Aboutus.triggered.connect( )
 
+        mainMenu = self.menuBar()
+        fileMenu = mainMenu.addMenu('&File')
+        fileMenu.addAction(Exit)
+        
 
-##  pc
-        s = socket.socket ()
-        s.settimeout (0.25)
-        try:
-            s.connect (("192.168.0.222", 135))
-        except socket.error:
-            print ("Reception Pc Offline \n")
-            zero="receptionoff.png"
+        HelpMenu = mainMenu.addMenu('Help')
+        HelpMenu.addAction(Info)
+        HelpMenu.addAction(Aboutus)
+
+    def close_application(self):            # Close Conformation
+        choice = QtGui.QMessageBox.question(self, 'Exit!',
+                                            "Are you really want to quit",
+                                            QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        if choice == QtGui.QMessageBox.Yes:
+            print("Exit")
+            sys.exit()
         else:
-            print ("Reception Pc Online \n")
-            zero="receptionon.png"
-
-        s.close()
+            pass
+##  pc
+        pc0 = ping("192.168.0.222",50,90, self,'pc0')
 #25
         pc1 = ping("192.168.0.172",50,180, self,'pc1')
         
@@ -112,53 +118,14 @@ class Window(QtGui.QMainWindow):
 #16
         pc11 = ping("192.168.0.128",350,360,self,"pc11")
         
-
-
-##---------------------------------------------------------------------------------------------
-
-        
-## First coloumn
-        
-        #hbox = QtGui.QHBoxLayout(self)
-        pixmap = QtGui.QPixmap(zero)
-        lbl0 = QtGui.QLabel(self)
-        lbl0.setPixmap(pixmap)
-        #hbox.addWidget(lbl)
-        #self.setLayout(hbox)
-        lbl0.move(50,90)
-        lbl0.resize(120,70)
-
-        
-
-
-
-
-##--------------------------------------------------------------------------------------------------
-
-
-        self.statusBar()
-        self.show() #MUST BE ADDED TO SHOW WINDOW
+        #self.statusBar()
+        #self.show() #MUST BE ADDED TO SHOW WINDOW
         
         # ADDING MENU BAR ITEMS
 
-        mainMenu = self.menuBar()
-        fileMenu = mainMenu.addMenu('&File')
-        fileMenu.addAction(Exit)
         
 
-        HelpMenu = mainMenu.addMenu('Help')
-        HelpMenu.addAction(Info)
-        HelpMenu.addAction(Aboutus)
-
-    def close_application(self):            # Close Conformation
-        choice = QtGui.QMessageBox.question(self, 'Exit!',
-                                            "Are you really want to quit",
-                                            QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
-        if choice == QtGui.QMessageBox.Yes:
-            print("Exit")
-            sys.exit()
-        else:
-            pass
+    
 
         
         
@@ -180,6 +147,6 @@ class Window(QtGui.QMainWindow):
         
 app = QtGui.QApplication(sys.argv)  #DEFINE THE APP
 GUI = Window()          #CALLING THE CLASS WINDOW
-
+GUI.show()
 
 sys.exit(app.exec_())
