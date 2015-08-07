@@ -115,7 +115,7 @@ class Window(QtGui.QMainWindow):
         lbl0.move(50,90)
         lbl0.resize(120,70)
 
-        pixmap = QtGui.QPixmap(three)
+        pixmap = QtGui.QPixmap(pc3.img)
         lbl1 = QtGui.QLabel(self)
         lbl1.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -123,7 +123,7 @@ class Window(QtGui.QMainWindow):
         lbl1.move(50,180)
         lbl1.resize(120,70)
 
-        pixmap = QtGui.QPixmap(six)
+        pixmap = QtGui.QPixmap(pc6.img)
         lbl2 = QtGui.QLabel(self)
         lbl2.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -131,7 +131,7 @@ class Window(QtGui.QMainWindow):
         lbl2.move(50,270)
         lbl2.resize(120,70)
 
-        pixmap = QtGui.QPixmap(nine)
+        pixmap = QtGui.QPixmap(pc9.img)
         lbl3 = QtGui.QLabel(self)
         lbl3.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -141,7 +141,7 @@ class Window(QtGui.QMainWindow):
         
 ## second coloumn
 
-        pixmap = QtGui.QPixmap(one)
+        pixmap = QtGui.QPixmap(pc1.img)
         lbl4 = QtGui.QLabel(self)
         lbl4.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -149,7 +149,7 @@ class Window(QtGui.QMainWindow):
         lbl4.move(200,90)
         lbl4.resize(120,70)
 
-        pixmap = QtGui.QPixmap(four)
+        pixmap = QtGui.QPixmap(pc4.img)
         lbl5 = QtGui.QLabel(self)
         lbl5.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -157,7 +157,7 @@ class Window(QtGui.QMainWindow):
         lbl5.move(200,180)
         lbl5.resize(120,70)
 
-        pixmap = QtGui.QPixmap(seven)
+        pixmap = QtGui.QPixmap(pc7.img)
         lbl6 = QtGui.QLabel(self)
         lbl6.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -165,7 +165,7 @@ class Window(QtGui.QMainWindow):
         lbl6.move(200,270)
         lbl6.resize(120,70)
 
-        pixmap = QtGui.QPixmap(ten)
+        pixmap = QtGui.QPixmap(pc10.img)
         lbl7 = QtGui.QLabel(self)
         lbl7.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -175,7 +175,7 @@ class Window(QtGui.QMainWindow):
 
 ## Third coloumn
 
-        pixmap = QtGui.QPixmap(two)
+        pixmap = QtGui.QPixmap(pc2.img)
         lbl8 = QtGui.QLabel(self)
         lbl8.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -183,7 +183,7 @@ class Window(QtGui.QMainWindow):
         lbl8.move(350,90)
         lbl8.resize(120,70)
 
-        pixmap = QtGui.QPixmap(five)
+        pixmap = QtGui.QPixmap(pc5.img)
         lbl9 = QtGui.QLabel(self)
         lbl9.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -191,7 +191,7 @@ class Window(QtGui.QMainWindow):
         lbl9.move(350,180)
         lbl9.resize(120,70)
 
-        pixmap = QtGui.QPixmap(eight)
+        pixmap = QtGui.QPixmap(pc8.img)
         lbl10 = QtGui.QLabel(self)
         lbl10.setPixmap(pixmap)
         #hbox.addWidget(lbl)
@@ -199,7 +199,7 @@ class Window(QtGui.QMainWindow):
         lbl10.move(350,270)
         lbl10.resize(120,70)
 
-        pixmap = QtGui.QPixmap(eleven)
+        pixmap = QtGui.QPixmap(pc11.img)
         lbl11 = QtGui.QLabel(self)
         lbl11.setPixmap(pixmap)
         #hbox.addWidget(lbl)
