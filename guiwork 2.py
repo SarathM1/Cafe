@@ -3,48 +3,6 @@ from PyQt4 import QtGui
 import socket
 #import time
 
-class ping():
-	"""To ping computers"""
-	def __init__(self, ip,name, movex , movey , obj ,status="off"):
-		self.ip = ip
-		self.name = name
-		self.obj = obj
-		self.s =  socket.socket ()
-		self.s.settimeout (0.25)
-
-		self.img = str(self.name) + str(status) + '.png'
-		self.movex = movex
-		self.movey = movey
-		self.setImage('off')
-		self.setLabel()
-		self.ping()
-
-		
-	
-	def ping(self):
-		try:
-			self.s.connect ((self.ip, 135))
-		except socket.error:
-			self.setImage('off')
-		else:
-			self.setImage('on')
-		self.s.close()
-		self.setLabel()
-	
-	def setLabel(self):
-		pixmap = QtGui.QPixmap(self.img)
-		self.lbl = QtGui.QLabel(self.obj)
-		self.lbl.setPixmap(pixmap)
-		#hbox.addWidget(self.lbl)
-		#self.setLayout(hbox)
-		self.lbl.move(self.movex,self.movey)
-		self.lbl.resize(120,70)
-
-
-	def setImage(self,st):
-		self.img = str(self.name) + (st) + '.png'
-
-
 		
 class Window(QtGui.QMainWindow):
 
@@ -53,8 +11,6 @@ class Window(QtGui.QMainWindow):
 		self.setGeometry(200,100, 900, 600)  # WINDOW SIZE
 		self.setWindowTitle("Radha Communications")   # WINDOW TITLE
 		self.setWindowIcon(QtGui.QIcon('LED.png'))   # LOGO AT TOP LEFT CORNER
-
-
 		
 		Exit = QtGui.QAction("Exit", self) # ADDING EXIT BUTTON IN FILE MENU
 		Exit.setShortcut("Ctrl+Q")         # SETTING SHORTCUT
@@ -83,42 +39,77 @@ class Window(QtGui.QMainWindow):
 		##  pc
 		
 		#-*while True:
-		pc0 = ping("192.168.1.19","pc0",50,90, self)
+		pc0 = self.ping("192.168.1.19","pc0",50,90, self)
 #25
-		pc1 = ping("192.168.0.172","pc1",200,90, self)
+		pc1 = self.ping("192.168.0.172","pc1",200,90, self)
 		
 #24
-		pc2 = ping("192.168.0.127","pc2",350,90,self)
+		pc2 = self.ping("192.168.0.127","pc2",350,90,self)
 		
 #23
-		pc3 = ping("192.168.0.38","pc3",50,180,self)
+		pc3 = self.ping("192.168.0.38","pc3",50,180,self)
 
 #22
-		pc4 = ping("192.168.0.114","pc4",200,180,self)
+		pc4 = self.ping("192.168.0.114","pc4",200,180,self)
 		
 #21
-		pc5 = ping("192.168.0.128","pc5",350,180,self)
+		pc5 = self.ping("192.168.0.128","pc5",350,180,self)
 		
 #20
-		pc6 = ping("192.168.0.20","pc6",50,270,self)
+		pc6 = self.ping("192.168.0.20","pc6",50,270,self)
 		
 #19
-		pc7 = ping("192.168.0.152","pc7",200,270,self)
+		pc7 = self.ping("192.168.0.152","pc7",200,270,self)
 		
 #18
-		pc8 = ping("192.168.0.153","pc8",350,270,self)
+		pc8 = self.ping("192.168.0.153","pc8",350,270,self)
 		
 #17
-		pc9 = ping("192.168.0.2","pc9",50,360,self)
+		pc9 = self.ping("192.168.0.2","pc9",50,360,self)
 		
 
 #16
-		pc10 = ping("192.168.0.128","pc10",200,360,self)
+		pc10 = self.ping("192.168.0.128","pc10",200,360,self)
 
 #16
-		pc11 = ping("192.168.0.128","pc11",350,360,self)
+		pc11 = self.ping("192.168.0.128","pc11",350,360,self)
 		
-		
+	def ping(self,ip,name, movex , movey , obj ,status="off"):
+		self.ip = ip
+		self.name = name
+		self.obj = obj
+		self.s =  socket.socket ()
+		self.s.settimeout (0.25)
+
+		self.img = str(self.name) + str(status) + '.png'
+		self.movex = movex
+		self.movey = movey
+		self.setImage('off')
+		self.setLabel()
+		self.pingPc()
+
+	def pingPc(self):
+		try:
+			self.s.connect ((self.ip, 135))
+		except socket.error:
+			self.setImage('off')
+		else:
+			self.setImage('on')
+		self.s.close()
+		self.setLabel()
+	
+	def setLabel(self):
+		pixmap = QtGui.QPixmap(self.img)
+		self.lbl = QtGui.QLabel(self.obj)
+		self.lbl.setPixmap(pixmap)
+		#hbox.addWidget(self.lbl)
+		#self.setLayout(hbox)
+		self.lbl.move(self.movex,self.movey)
+		self.lbl.resize(120,70)
+
+
+	def setImage(self,st):
+		self.img = str(self.name) + (st) + '.png'	
 
 	def close_application(self):            # Close Conformation
 		choice = QtGui.QMessageBox.question(self, 'Exit!',
