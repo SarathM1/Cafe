@@ -11,7 +11,7 @@ class worker(QThread):
 	def __init__(self,ip,name,movex,movey):
 		QThread.__init__(self, parent=app)
 		
-		print("\t\t\t\nNew Thread\n")
+		#print("\t\t\t\nNew Thread\n")
 		self.ip = ip
 		self.name = name
 
@@ -21,14 +21,14 @@ class worker(QThread):
 	def run(self):
 		self.active = True
 
-		while self.active:
+		while self.active:			# Comment while loop to ping all PC's only once
 			print ('Ping '+str(self.name)+' '+str(self.ip))
 			try:
 				self.s =  socket.socket ()
 				self.s.settimeout (0.25)
 				self.s.connect ((self.ip, 135))
 			except socket.error as e:
-				print('run: '+str(self.name)+' '+str(self.ip)+', '+str(e))
+				print('Exception: '+str(self.name)+' '+str(self.ip)+', '+str(e))
 				self.signal.emit(self.name+"off.png", [self.movex,self.movey])
 			else:
 				self.signal.emit(self.name+"on.png", [self.movex,self.movey])
@@ -70,40 +70,51 @@ class Window(QMainWindow):
 		##  pc
 		self.threads = []
 		
-		pc0 = self.ping("192.168.1.10","pc0",50,90)
+		self.pc = [\
+		"192.168.1.10",
+		"192.168.1.19",
+		"192.168.0.127",
+		"192.168.0.38",
+		"192.168.0.114",
+		"192.168.0.128",
+		"192.168.0.20",
+		"192.168.0.152",
+		"192.168.0.128",
+		"192.168.0.20",
+		"192.168.0.152",
+		"192.168.0.153"\
+		]
 
-		pc1 = self.ping("192.168.1.19","pc1",200,90)
+		x_cord = [50,200,350]
+		y_cord = [90,180,270,360]
+		
+		pc_cntr = 0
+		xc = 0
+		yc = 0
 
-		pc2 = self.ping("192.168.0.127","pc2",350,90)
-		
-#23
-		pc3 = self.ping("192.168.0.38","pc3",50,180)
+		for ip in self.pc:
+			pc_name = 'pc'+str(pc_cntr)
+			if xc == 3:
+				xc = 0
+			if yc == 4:
+				yc = 0
 
-#22
-		pc4 = self.ping("192.168.0.114","pc4",200,180)
-		
-#21
-		pc5 = self.ping("192.168.0.128","pc5",350,180)
-		
-#20
-		pc6 = self.ping("192.168.0.20","pc6",50,270)
-		
-#19
-		pc7 = self.ping("192.168.0.152","pc7",200,270)
-		
-#18
-		pc8 = self.ping("192.168.0.153","pc8",350,270)
-		
-#17
-		pc9 = self.ping("192.168.0.2","pc9",50,360)
-		
+			self.ping( ip, pc_name , x_cord[xc], y_cord[yc])
+			
+			pc_cntr += 1
+			xc += 1
+			yc += 1
 
-#16
-		pc10 = self.ping("192.168.0.128","pc10",200,360)
 
-#16
-		pc11 = self.ping("192.168.0.128","pc11",350,360)
+
+
 	
+	def ping(self,ip,name, movex , movey):
+		thread = worker(ip,name,movex,movey)
+		thread.signal.connect(self.showStatus)
+		thread.start()
+		self.threads.append(thread)
+
 	def showStatus(self, img,cord):
 		pixmap = QPixmap(img)
 		icon = QLabel(self)
@@ -111,12 +122,6 @@ class Window(QMainWindow):
 		icon.move(cord[0],cord[1])
 		icon.resize(120,70)
 		icon.show()
-
-	def ping(self,ip,name, movex , movey):
-		thread = worker(ip,name,movex,movey)
-		thread.signal.connect(self.showStatus)
-		thread.start()
-		self.threads.append(thread)
 
 
 	def close_application(self):            # Close Conformation
