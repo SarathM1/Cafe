@@ -25,7 +25,7 @@ class worker(QThread):
 			print ('Ping '+str(self.name)+' '+str(self.ip))
 			try:
 				self.s =  socket.socket ()
-				self.s.settimeout (0.25)
+				self.s.settimeout (0.25)		# Max time limit for pinging
 				self.s.connect ((self.ip, 135))
 			except socket.error as e:
 				print('Exception: '+str(self.name)+' '+str(self.ip)+', '+str(e))
@@ -140,9 +140,6 @@ class Window(QMainWindow):
 			sys.exit()
 		else:
 			pass
-
-
-
 
 ##-------------------------------------------------------------------------------------------------
 		
