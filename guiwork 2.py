@@ -1,13 +1,27 @@
 import sys
 from PyQt4 import QtGui
+from PyQt4 import QtCore as qtcore
 import socket
-#import time
+import time
 
+class worker(qtcore.QThread):
+	def __init__(self):
+		qtcore.QThread.__init__(self, parent=app)
+		self.signal = qtcore.SIGNAL("signal")
+	def run(self):
+		time.sleep(2)
+		print ("in thread")
+		self.emit(self.signal, "hi from thread")
 		
 class Window(QtGui.QMainWindow):
 
 	def __init__(self):
 		super(Window, self).__init__()  # SELF CAN REPLACE THE COMMAND WINDOW INSIDE CLASS WINDOW. EG. SELF.SHOW()  for   WINDOW.SHOW()
+
+		thread = worker()
+		self.connect(thread, thread.signal, self.testfunc)
+		thread.start()
+
 		self.setGeometry(200,100, 900, 600)  # WINDOW SIZE
 		self.setWindowTitle("Radha Communications")   # WINDOW TITLE
 		self.setWindowIcon(QtGui.QIcon('LED.png'))   # LOGO AT TOP LEFT CORNER
@@ -109,7 +123,9 @@ class Window(QtGui.QMainWindow):
 
 
 	def setImage(self,st):
-		self.img = str(self.name) + (st) + '.png'	
+		self.img = str(self.name) + (st) + '.png'
+	def testfunc(self, sigstr):
+		print (sigstr)
 
 	def close_application(self):            # Close Conformation
 		choice = QtGui.QMessageBox.question(self, 'Exit!',
