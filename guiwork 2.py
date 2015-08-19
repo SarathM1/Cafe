@@ -21,19 +21,19 @@ class worker(QThread):
 	def run(self):
 		self.active = True
 
-		#while self.active:
-		print ('Ping '+str(self.name)+' '+str(self.ip))
-		try:
-			self.s =  socket.socket ()
-			self.s.settimeout (0.25)
-			self.s.connect ((self.ip, 135))
-		except socket.error as e:
-			print('run: '+str(self.name)+' '+str(self.ip)+', '+str(e))
-			self.signal.emit(self.name+"off.png", [self.movex,self.movey])
-		else:
-			self.signal.emit(self.name+"on.png", [self.movex,self.movey])
-		self.s.close()
-		time.sleep(2)
+		while self.active:
+			print ('Ping '+str(self.name)+' '+str(self.ip))
+			try:
+				self.s =  socket.socket ()
+				self.s.settimeout (0.25)
+				self.s.connect ((self.ip, 135))
+			except socket.error as e:
+				print('run: '+str(self.name)+' '+str(self.ip)+', '+str(e))
+				self.signal.emit(self.name+"off.png", [self.movex,self.movey])
+			else:
+				self.signal.emit(self.name+"on.png", [self.movex,self.movey])
+			self.s.close()
+			time.sleep(1)
 		
 class Window(QMainWindow):
 
@@ -69,18 +69,10 @@ class Window(QMainWindow):
 
 		##  pc
 		self.threads = []
-		#pc0 = self.ping("192.168.1.10","pc0",50,90, self)
-		thread = worker("192.168.1.10","pc0",50,90)
-		thread.signal.connect(self.showStatus)
-		thread.start()
-		self.threads.append(thread)
 		
+		pc0 = self.ping("192.168.1.10","pc0",50,90)
 
-		#pc1 = self.ping("192.168.1.19","pc1",200,90, self)
-		thread = worker("192.168.1.19","pc1",200,90)
-		thread.signal.connect(self.showStatus)
-		thread.start()
-		self.threads.append(thread)
+		pc1 = self.ping("192.168.1.19","pc1",200,90)
 
 		pc2 = self.ping("192.168.0.127","pc2",350,90)
 		
@@ -138,7 +130,7 @@ class Window(QMainWindow):
 			for t in self.threads:
 				t.active = False
 				t.quit()
-				t.wait()
+				t.wait(1000)
 				
 			sys.exit()
 		else:
