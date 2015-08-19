@@ -11,23 +11,29 @@ class worker(QThread):
 	def __init__(self,ip,name,movex,movey):
 		QThread.__init__(self, parent=app)
 		
+		print("\t\t\t\nNew Thread\n")
 		self.ip = ip
 		self.name = name
 
 		self.movex = movex
 		self.movey = movey
 
-		self.s =  socket.socket ()
-		
 	def run(self):
-		print ('Starting '+str(self.name)+' '+str(self.ip))
+		self.active = True
+
+		#while self.active:
+		print ('Ping '+str(self.name)+' '+str(self.ip))
 		try:
+			self.s =  socket.socket ()
+			self.s.settimeout (0.25)
 			self.s.connect ((self.ip, 135))
 		except socket.error as e:
 			print('run: '+str(self.name)+' '+str(self.ip)+', '+str(e))
 			self.signal.emit(self.name+"off.png", [self.movex,self.movey])
 		else:
 			self.signal.emit(self.name+"on.png", [self.movex,self.movey])
+		self.s.close()
+		time.sleep(2)
 		
 class Window(QMainWindow):
 
@@ -62,95 +68,63 @@ class Window(QMainWindow):
 		HelpMenu.addAction(Aboutus)
 
 		##  pc
-		
+		self.threads = []
 		#pc0 = self.ping("192.168.1.10","pc0",50,90, self)
 		thread = worker("192.168.1.10","pc0",50,90)
-
-		thread.signal.connect(self.testfunc)
-
+		thread.signal.connect(self.showStatus)
 		thread.start()
-		
+		self.threads.append(thread)
 		
 
 		#pc1 = self.ping("192.168.1.19","pc1",200,90, self)
 		thread = worker("192.168.1.19","pc1",200,90)
-		
-		thread.signal.connect(self.testfunc)
+		thread.signal.connect(self.showStatus)
 		thread.start()
+		self.threads.append(thread)
 
-		pc2 = self.ping("192.168.0.127","pc2",350,90,self)
+		pc2 = self.ping("192.168.0.127","pc2",350,90)
 		
 #23
-		pc3 = self.ping("192.168.0.38","pc3",50,180,self)
+		pc3 = self.ping("192.168.0.38","pc3",50,180)
 
 #22
-		pc4 = self.ping("192.168.0.114","pc4",200,180,self)
+		pc4 = self.ping("192.168.0.114","pc4",200,180)
 		
 #21
-		pc5 = self.ping("192.168.0.128","pc5",350,180,self)
+		pc5 = self.ping("192.168.0.128","pc5",350,180)
 		
 #20
-		pc6 = self.ping("192.168.0.20","pc6",50,270,self)
+		pc6 = self.ping("192.168.0.20","pc6",50,270)
 		
 #19
-		pc7 = self.ping("192.168.0.152","pc7",200,270,self)
+		pc7 = self.ping("192.168.0.152","pc7",200,270)
 		
 #18
-		pc8 = self.ping("192.168.0.153","pc8",350,270,self)
+		pc8 = self.ping("192.168.0.153","pc8",350,270)
 		
 #17
-		pc9 = self.ping("192.168.0.2","pc9",50,360,self)
+		pc9 = self.ping("192.168.0.2","pc9",50,360)
 		
 
 #16
-		pc10 = self.ping("192.168.0.128","pc10",200,360,self)
+		pc10 = self.ping("192.168.0.128","pc10",200,360)
 
 #16
-		pc11 = self.ping("192.168.0.128","pc11",350,360,self)
+		pc11 = self.ping("192.168.0.128","pc11",350,360)
 	
-	def testfunc(self, sigstr,cord):
-		print ('sigstr: '+ sigstr)
-		
-		self.img = sigstr
-		pixmap = QPixmap(sigstr)
-		lbl0 = QLabel(self.obj)
-		lbl0.setPixmap(pixmap)
-		lbl0.move(cord[0],cord[1])
-		lbl0.resize(120,70)
-		lbl0.show()
+	def showStatus(self, img,cord):
+		pixmap = QPixmap(img)
+		icon = QLabel(self)
+		icon.setPixmap(pixmap)
+		icon.move(cord[0],cord[1])
+		icon.resize(120,70)
+		icon.show()
 
-	def ping(self,ip,name, movex , movey , obj ,status="off"):
-		self.ip = ip
-		self.name = name
-		self.obj = obj
-		
-
-		self.img = str(self.name) + str(status) + '.png'
-		self.movex = movex
-		self.movey = movey
-
-	def pingPc(self):
-		try:
-			self.s.connect ((self.ip, 135))
-		except socket.error:
-			self.setImage('off')
-		else:
-			self.setImage('on')
-		self.s.close()
-		self.setLabel()
-	
-	def setLabel(self):
-		pixmap = QPixmap(self.img)
-		self.lbl = QLabel(self.obj)
-		self.lbl.setPixmap(pixmap)
-		self.lbl.move(self.movex,self.movey)
-		self.lbl.resize(120,70)
-
-
-	def setImage(self,st):
-		self.img = str(self.name) + (st) + '.png'
-	
-
+	def ping(self,ip,name, movex , movey):
+		thread = worker(ip,name,movex,movey)
+		thread.signal.connect(self.showStatus)
+		thread.start()
+		self.threads.append(thread)
 
 
 	def close_application(self):            # Close Conformation
@@ -158,10 +132,18 @@ class Window(QMainWindow):
 											"Do you really want to quit",
 											QMessageBox.Yes | QMessageBox.No)
 		if choice == QMessageBox.Yes:
-			print("Exit")
+			print("\n\n\tWaiting for threads to stop. . \n\n")
+			
+
+			for t in self.threads:
+				t.active = False
+				t.quit()
+				t.wait()
+				
 			sys.exit()
 		else:
 			pass
+
 
 
 
