@@ -1,13 +1,13 @@
 import sys
-from PyQt4 import QtGui
-from PyQt4 import QtCore as qtcore
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 import socket
 import time
 
-class worker(qtcore.QThread):
+class worker(QThread):
 	def __init__(self,ip,name):
-		qtcore.QThread.__init__(self, parent=app)
-		self.signal = qtcore.SIGNAL("signal")
+		QThread.__init__(self, parent=app)
+		self.signal = SIGNAL("signal")
 		self.ip = ip
 		self.name = name
 		self.s =  socket.socket ()
@@ -27,7 +27,7 @@ class worker(qtcore.QThread):
 			#self.setImage('on')
 			self.emit(self.signal, self.name+"on.png")
 		
-class Window(QtGui.QMainWindow):
+class Window(QMainWindow):
 
 	def __init__(self):
 		super(Window, self).__init__()  # SELF CAN REPLACE THE COMMAND WINDOW INSIDE CLASS WINDOW. EG. SELF.SHOW()  for   WINDOW.SHOW()
@@ -36,20 +36,20 @@ class Window(QtGui.QMainWindow):
 
 		self.setGeometry(200,100, 900, 600)  # WINDOW SIZE
 		self.setWindowTitle("Radha Communications")   # WINDOW TITLE
-		self.setWindowIcon(QtGui.QIcon('LED.png'))   # LOGO AT TOP LEFT CORNER
+		self.setWindowIcon(QIcon('LED.png'))   # LOGO AT TOP LEFT CORNER
 		
-		Exit = QtGui.QAction("Exit", self) # ADDING EXIT BUTTON IN FILE MENU
+		Exit = QAction("Exit", self) # ADDING EXIT BUTTON IN FILE MENU
 		Exit.setShortcut("Ctrl+Q")         # SETTING SHORTCUT
 		Exit.setStatusTip('Close The Window')
 		Exit.triggered.connect(self.close_application)
 
-		Info = QtGui.QAction("Info", self)    #ADDING INFO BUTTON
+		Info = QAction("Info", self)    #ADDING INFO BUTTON
 		Info.setShortcut("Ctrl+I")
 		Info.setStatusTip('Information')
 		#Info.triggered.connect( )
 
 
-		Aboutus = QtGui.QAction("About us", self)    #ADDING About us BUTTON
+		Aboutus = QAction("About us", self)    #ADDING About us BUTTON
 		Aboutus.setStatusTip('About Us')
 		#Aboutus.triggered.connect( )
 
@@ -72,9 +72,9 @@ class Window(QtGui.QMainWindow):
 		thread.start()
 		
 		"""
-		pixmap = QtGui.QPixmap(self.img)
+		pixmap = QPixmap(self.img)
 		print ("pc0 img:"+str(self.img))
-		lbl0 = QtGui.QLabel(self)
+		lbl0 = QLabel(self)
 		lbl0.setPixmap(pixmap)
 		#hbox.addWidget(lbl)
 		#self.setLayout(hbox)
@@ -133,8 +133,8 @@ class Window(QtGui.QMainWindow):
 		print (self.img)
 		"""
 		self.img = sigstr
-		pixmap = QtGui.QPixmap(sigstr)
-		lbl0 = QtGui.QLabel(self.obj)
+		pixmap = QPixmap(sigstr)
+		lbl0 = QLabel(self.obj)
 		lbl0.setPixmap(pixmap)
 		#hbox.addWidget(lbl)
 		#self.setLayout(hbox)
@@ -167,8 +167,8 @@ class Window(QtGui.QMainWindow):
 		self.setLabel()
 	
 	def setLabel(self):
-		pixmap = QtGui.QPixmap(self.img)
-		self.lbl = QtGui.QLabel(self.obj)
+		pixmap = QPixmap(self.img)
+		self.lbl = QLabel(self.obj)
 		self.lbl.setPixmap(pixmap)
 		#hbox.addWidget(self.lbl)
 		#self.setLayout(hbox)
@@ -183,10 +183,10 @@ class Window(QtGui.QMainWindow):
 
 
 	def close_application(self):            # Close Conformation
-		choice = QtGui.QMessageBox.question(self, 'Exit!',
+		choice = QMessageBox.question(self, 'Exit!',
 											"Are you really want to quit",
-											QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
-		if choice == QtGui.QMessageBox.Yes:
+											QMessageBox.Yes | QMessageBox.No)
+		if choice == QMessageBox.Yes:
 			print("Exit")
 			sys.exit()
 		else:
@@ -220,7 +220,7 @@ class Window(QtGui.QMainWindow):
 
 ##-------------------------------------------------------------------------------------------------
 		
-app = QtGui.QApplication(sys.argv)  #DEFINE THE APP
+app = QApplication(sys.argv)  #DEFINE THE APP
 GUI = Window()          #CALLING THE CLASS WINDOW
 GUI.show()
 GUI.statusBar()
