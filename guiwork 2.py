@@ -1,7 +1,6 @@
 import sys
 from PyQt4 import QtGui
 from PyQt4 import QtCore as qtcore
-from PyQt4.QtCore import pyqtSignal
 import socket
 import time
 
@@ -84,7 +83,7 @@ class Window(QtGui.QMainWindow):
 		"""
 
 		pc1 = self.ping("192.168.1.19","pc1",200,90, self)
-		thread = worker("192.168.1.19","pc1",200,90)
+		thread = worker("192.168.1.19","pc1")
 		self.connect(thread, thread.signal, self.testfunc)
 		thread.start()
 #25		
