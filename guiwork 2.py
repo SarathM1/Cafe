@@ -11,9 +11,6 @@ class worker(QThread):
 	def __init__(self,ip,name,movex,movey):
 		QThread.__init__(self, parent=app)
 		
-		#self.signal = SIGNAL("signal")
-		
-
 		self.ip = ip
 		self.name = name
 
@@ -21,22 +18,15 @@ class worker(QThread):
 		self.movey = movey
 
 		self.s =  socket.socket ()
-		#self.s.settimeout (0.25)
+		
 	def run(self):
-		#time.sleep(2)
-		#print ("in thread")
-		#self.emit(self.signal, "hi from thread")
 		print ('Starting '+str(self.name)+' '+str(self.ip))
 		try:
 			self.s.connect ((self.ip, 135))
 		except socket.error as e:
-			#self.setImage('off')
 			print('run: '+str(self.name)+' '+str(self.ip)+', '+str(e))
-			#self.emit(self.signal, self.name+"off.png")
 			self.signal.emit(self.name+"off.png", [self.movex,self.movey])
 		else:
-			#self.setImage('on')
-			#self.emit(self.signal, self.name+"on.png")
 			self.signal.emit(self.name+"on.png", [self.movex,self.movey])
 		
 class Window(QMainWindow):
@@ -58,13 +48,10 @@ class Window(QMainWindow):
 		Info = QAction("Info", self)    #ADDING INFO BUTTON
 		Info.setShortcut("Ctrl+I")
 		Info.setStatusTip('Information')
-		#Info.triggered.connect( )
-
-
+		
 		Aboutus = QAction("About us", self)    #ADDING About us BUTTON
 		Aboutus.setStatusTip('About Us')
-		#Aboutus.triggered.connect( )
-
+		
 		mainMenu = self.menuBar()
 		fileMenu = mainMenu.addMenu('&File')
 		fileMenu.addAction(Exit)
@@ -76,12 +63,9 @@ class Window(QMainWindow):
 
 		##  pc
 		
-		#-*while True:
-		
 		#pc0 = self.ping("192.168.1.10","pc0",50,90, self)
 		thread = worker("192.168.1.10","pc0",50,90)
 
-		#self.connect(thread, thread.signal, self.testfunc)
 		thread.signal.connect(self.testfunc)
 
 		thread.start()
@@ -90,13 +74,10 @@ class Window(QMainWindow):
 
 		#pc1 = self.ping("192.168.1.19","pc1",200,90, self)
 		thread = worker("192.168.1.19","pc1",200,90)
-		#self.connect(thread, thread.signal, self.testfunc)
+		
 		thread.signal.connect(self.testfunc)
 		thread.start()
-#25		
-		#pc1 = self.ping("192.168.0.172","pc1",200,90, self)
-		
-#24
+
 		pc2 = self.ping("192.168.0.127","pc2",350,90,self)
 		
 #23
@@ -148,10 +129,6 @@ class Window(QMainWindow):
 		self.movex = movex
 		self.movey = movey
 
-		#self.setImage('on')
-		#self.setLabel()
-		#self.pingPc()
-
 	def pingPc(self):
 		try:
 			self.s.connect ((self.ip, 135))
@@ -166,8 +143,6 @@ class Window(QMainWindow):
 		pixmap = QPixmap(self.img)
 		self.lbl = QLabel(self.obj)
 		self.lbl.setPixmap(pixmap)
-		#hbox.addWidget(self.lbl)
-		#self.setLayout(hbox)
 		self.lbl.move(self.movex,self.movey)
 		self.lbl.resize(120,70)
 
@@ -180,37 +155,13 @@ class Window(QMainWindow):
 
 	def close_application(self):            # Close Conformation
 		choice = QMessageBox.question(self, 'Exit!',
-											"Are you really want to quit",
+											"Do you really want to quit",
 											QMessageBox.Yes | QMessageBox.No)
 		if choice == QMessageBox.Yes:
 			print("Exit")
 			sys.exit()
 		else:
 			pass
-
-		
-		#self.show() #MUST BE ADDED TO SHOW WINDOW
-		
-		# ADDING MENU BAR ITEMS
-		#time.sleep(1)
-			
-		
-
-	
-
-		
-		
-
-		
-			
-
-
-	
-	
-
-
-
-	
 
 
 
