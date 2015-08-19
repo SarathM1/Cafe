@@ -5,11 +5,21 @@ import socket
 import time
 
 class worker(QThread):
-	def __init__(self,ip,name):
+	
+	signal = pyqtSignal(str, list)
+	
+	def __init__(self,ip,name,movex,movey):
 		QThread.__init__(self, parent=app)
-		self.signal = SIGNAL("signal")
+		
+		#self.signal = SIGNAL("signal")
+		
+
 		self.ip = ip
 		self.name = name
+
+		self.movex = movex
+		self.movey = movey
+
 		self.s =  socket.socket ()
 		#self.s.settimeout (0.25)
 	def run(self):
@@ -22,10 +32,12 @@ class worker(QThread):
 		except socket.error as e:
 			#self.setImage('off')
 			print('run: '+str(self.name)+' '+str(self.ip)+', '+str(e))
-			self.emit(self.signal, self.name+"off.png")
+			#self.emit(self.signal, self.name+"off.png")
+			self.signal.emit(self.name+"off.png", [self.movex,self.movey])
 		else:
 			#self.setImage('on')
-			self.emit(self.signal, self.name+"on.png")
+			#self.emit(self.signal, self.name+"on.png")
+			self.signal.emit(self.name+"on.png", [self.movex,self.movey])
 		
 class Window(QMainWindow):
 
@@ -66,25 +78,20 @@ class Window(QMainWindow):
 		
 		#-*while True:
 		
-		pc0 = self.ping("192.168.1.10","pc0",50,90, self)
-		thread = worker("192.168.1.10","pc0")
-		self.connect(thread, thread.signal, self.testfunc)
+		#pc0 = self.ping("192.168.1.10","pc0",50,90, self)
+		thread = worker("192.168.1.10","pc0",50,90)
+
+		#self.connect(thread, thread.signal, self.testfunc)
+		thread.signal.connect(self.testfunc)
+
 		thread.start()
 		
-		"""
-		pixmap = QPixmap(self.img)
-		print ("pc0 img:"+str(self.img))
-		lbl0 = QLabel(self)
-		lbl0.setPixmap(pixmap)
-		#hbox.addWidget(lbl)
-		#self.setLayout(hbox)
-		lbl0.move(200,90)
-		lbl0.resize(120,70)
-		"""
+		
 
-		pc1 = self.ping("192.168.1.19","pc1",200,90, self)
-		thread = worker("192.168.1.19","pc1")
-		self.connect(thread, thread.signal, self.testfunc)
+		#pc1 = self.ping("192.168.1.19","pc1",200,90, self)
+		thread = worker("192.168.1.19","pc1",200,90)
+		#self.connect(thread, thread.signal, self.testfunc)
+		thread.signal.connect(self.testfunc)
 		thread.start()
 #25		
 		#pc1 = self.ping("192.168.0.172","pc1",200,90, self)
@@ -120,25 +127,14 @@ class Window(QMainWindow):
 #16
 		pc11 = self.ping("192.168.0.128","pc11",350,360,self)
 	
-	def testfunc(self, sigstr):
+	def testfunc(self, sigstr,cord):
 		print ('sigstr: '+ sigstr)
-		"""
-		if sigstr == "off":
-			#img='pc0off.png'
-			self.setImage('off')
-		else:
-			#img='pc0on.png'
-			self.setImage('on')
-		#self.s.close()
-		print (self.img)
-		"""
+		
 		self.img = sigstr
 		pixmap = QPixmap(sigstr)
 		lbl0 = QLabel(self.obj)
 		lbl0.setPixmap(pixmap)
-		#hbox.addWidget(lbl)
-		#self.setLayout(hbox)
-		lbl0.move(50,90)
+		lbl0.move(cord[0],cord[1])
 		lbl0.resize(120,70)
 		lbl0.show()
 
